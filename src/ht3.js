@@ -1,2 +1,5 @@
+const storeMediator = postal.channel("store");
+
 store.initialize();
-ui.renderList(store.getList());
+ui.renderList(store.getBooks());
+

@@ -4,10 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>FP HT1</title>
+    <title>FP HT3</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+
+    <h3>Library</h3>
+
+    <div id="header">
+        <strong>
+            <span>Title</span>
+            <span>Author</span>
+            <span>Publishing House</span>
+            <span>Date</span>
+            <span>Tags</span>
+            <span>Is Read</span>
+        </strong>
+    </div>   
+
+    <div id='list'></div>
+
+    <div id="add-book-container">
+        <input id='input-title' type='text' />
+        <input id='input-author' type='text' />
+        <input id='input-publishingHouse' type='text' />
+        <input id='input-date' type='text' />
+        <input id='input-tags' type='text' />
+        <input id='input-isRead' type='checkbox'>
+        <button id='add-book-button'>Add</button>
+    </div>   
+
     <script src="./node_modules/immutable/dist/immutable.js"></script>
-    <script src="./ht3.js"></script>
+    <script src="http://wzrd.in/standalone/uuid%2Fv1@latest"></script>
+    <script src="./src/store.js"></script>
+    <script src="./src/ui.js"></script>
+    <script src="./src/ht3.js"></script>
 </body>
 </html>

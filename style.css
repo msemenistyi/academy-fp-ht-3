@@ -1,0 +1,16 @@
+#header{
+    margin-bottom: 10px;
+}
+
+#header span, #list div span{
+    display: inline-block;
+    margin-right: 7px;
+}
+
+#header span, #add-book-container input, #list div span, #list div input{
+    width: 200px;
+}
+
+#add-book-container{
+    margin-top: 10px;
+}
