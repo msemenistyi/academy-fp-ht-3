@@ -11,6 +11,17 @@
 
     <h3>Library</h3>
 
+    <div id="filter-container">
+        <input id='filter-title' type='text' />
+        <input id='filter-author' type='text' />
+        <input id='filter-publishingHouse' type='text' />
+        <input id='filter-date' type='text' />
+        <input id='filter-tags' type='text' />
+        <input id='filter-isRead' type='checkbox'>
+        <button id='filter-button'>Filter</button>
+        <button id='filter-clear-button'>Clear</button>
+    </div>   
+
     <div id="header">
         <strong>
             <span>Title</span>
@@ -35,7 +46,8 @@
     </div>   
 
     <script src="./node_modules/immutable/dist/immutable.js"></script>
-    <script src="http://wzrd.in/standalone/uuid%2Fv1@latest"></script>
+    <script src="./node_modules/pure-uuid/uuid.js"></script>
+    <script src="./node_modules/wolfy87-eventemitter/EventEmitter.js"></script>
     <script src="./src/store.js"></script>
     <script src="./src/ui.js"></script>
     <script src="./src/ht3.js"></script>

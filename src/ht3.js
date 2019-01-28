@@ -1,5 +1,5 @@
-const storeMediator = postal.channel("store");
+const eventBus = new EventEmitter();
 
-store.initialize();
-ui.renderList(store.getBooks());
+ui.initialize({eventBus: eventBus});
+store.initialize({eventBus: eventBus});
 
