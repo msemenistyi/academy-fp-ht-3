@@ -11,13 +11,14 @@
 
     <h3>Library</h3>
 
+    <h4>Filter</h4>
     <div id="filter-container">
-        <input id='filter-title' type='text' />
-        <input id='filter-author' type='text' />
-        <input id='filter-publishingHouse' type='text' />
-        <input id='filter-date' type='text' />
-        <input id='filter-tags' type='text' />
-        <input id='filter-isRead' type='checkbox'>
+        <input id='filter-input-title' type='text' />
+        <input id='filter-input-author' type='text' />
+        <input id='filter-input-publishingHouse' type='text' />
+        <input id='filter-input-date' type='text' />
+        <input id='filter-input-tags' type='text' />
+        <input id='filter-input-isRead' type='checkbox'>
         <button id='filter-button'>Filter</button>
         <button id='filter-clear-button'>Clear</button>
     </div>   
@@ -35,21 +36,33 @@
 
     <div id='list'></div>
 
+    <h4>Add book</h4>
     <div id="add-book-container">
-        <input id='input-title' type='text' />
-        <input id='input-author' type='text' />
-        <input id='input-publishingHouse' type='text' />
-        <input id='input-date' type='text' />
-        <input id='input-tags' type='text' />
-        <input id='input-isRead' type='checkbox'>
+        <input id='add-input-title' type='text' />
+        <input id='add-input-author' type='text' />
+        <input id='add-input-publishingHouse' type='text' />
+        <input id='add-input-date' type='text' />
+        <input id='add-input-tags' type='text' />
+        <input id='add-input-isRead' type='checkbox'>
         <button id='add-book-button'>Add</button>
+    </div>   
+
+    <h4>Edit book</h4>
+    <div id="edit-book-container">
+        <input id='edit-input-title' type='text' disabled />
+        <input id='edit-input-author' type='text' disabled />
+        <input id='edit-input-publishingHouse' type='text' disabled />
+        <input id='edit-input-date' type='text' disabled />
+        <input id='edit-input-tags' type='text' disabled />
+        <input id='edit-input-isRead' type='checkbox' disabled>
+        <button id='edit-input-button' disabled>Edit</button>
     </div>   
 
     <script src="./node_modules/immutable/dist/immutable.js"></script>
     <script src="./node_modules/pure-uuid/uuid.js"></script>
     <script src="./node_modules/wolfy87-eventemitter/EventEmitter.js"></script>
-    <script src="./src/store.js"></script>
-    <script src="./src/ui.js"></script>
-    <script src="./src/ht3.js"></script>
+    <script type="module" src="./src/store.js"></script>
+    <script type="module" src="./src/ui.js"></script>
+    <script type="module" src="./src/ht3.js"></script>
 </body>
 </html>
