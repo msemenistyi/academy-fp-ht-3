@@ -81,7 +81,7 @@ const renderEditInputs = (inputBook) => {
 
 const getBookById = (bookId) => {
     const [ books ] = useState('books');
-    const [ key, value] = books.findEntry((el) => el.id === bookId);
+    const [ key, value] = books.findEntry((el) => el.get('id') === bookId);
     return value;
 };
 
@@ -92,7 +92,7 @@ const onAddClick = (inputNames) => {
 
 const onRemoveClick = (bookId) => context.eventBus.emit('action', {type: 'REMOVE_BOOK', bookId });
 
-const onEditClick = (inputNames, bookId) => {    
+const onEditClick = (bookId) => {    
     const book = getBookById(bookId);
     renderEditInputs(book);
 };
