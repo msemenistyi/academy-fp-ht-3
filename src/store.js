@@ -24,7 +24,7 @@ const initializeSubscriptions = () => {
                 remove(params.bookId);
                 break;
             case 'EDIT_BOOK': 
-                edit(params);
+                edit(params.book);
                 break;
             case 'FILTER_BOOKS': 
                 filter(params.filters);
@@ -61,7 +61,12 @@ const add = book => {
     setState('books', books);
 };
 
-const edit = book => book;
+const edit = book => {
+    const [bookIndex] = getState('books').findEntry(el => el.get('id') === book.id);
+    const books = getState('books').set(bookIndex, Immutable.Map(book));
+    setState('books', books);
+};
+
 const remove = bookId => {
     const books = getState('books').filter((book) => book.get('id') !== bookId);
     return setState('books', books);

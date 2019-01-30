@@ -2,6 +2,14 @@ const context = {
     eventBus: {}
 }
 
+const useState = (() => {
+    let state = Immutable.Map();
+    
+    return (prop) => {
+        return [state.get(prop), (value) => state = state.set(prop, value)];
+    }
+})();
+
 const renderList = list => {
 
     const rowsHTML = list.map((row) => {
@@ -14,7 +22,7 @@ const renderList = list => {
             <span class='date'>${row.get('date')}</span>
             <span class='tags'>${row.get('tags')}</span>
             <input class='isRead' type='checkbox' ${row.get('isRead') ? 'checked': ''} disabled />
-            <button class='remove-book-button'>Edit</button>                
+            <button class='edit-book-button'>Edit</button>                
             <button class='remove-book-button'>Remove</button>
         </div>   
     `});
@@ -41,17 +49,41 @@ const readInputValues = (inputNames, inputType) => {
         .reduce((acc, obj) => Object.assign({}, acc, obj), {});
 }
 
-const toggleDisabledInputs = (inputNames, inputType, value) => {
-    return inputNames.forEach((name) => {
-        const inputEl = document.getElementById(`${inputType}-input-${name}`);
-        inputEl.disabled = value;
-    })
+const renderEditInputs = (inputBook) => {
+    
+    const emptyBook = Immutable.Map({
+        id: '',
+        title: '',
+        author: '',
+        publishingHouse: '',
+        date: '',
+        tags: '',
+        isRead: false
+    }); 
 
+    const book = inputBook || emptyBook;
+    const disabled = Boolean(inputBook) ? '' : 'disabled';
+
+    const editInputsHTML = `
+        <input id='edit-input-id' type='hidden' value="${book.get('id')}" ${disabled}/>
+        <input id='edit-input-title' type='text' value="${book.get('title')}" ${disabled}/>
+        <input id='edit-input-author' type='text' value="${book.get('author')}" ${disabled} />
+        <input id='edit-input-publishingHouse' type='text' value="${book.get('publishingHouse')}" ${disabled}/>
+        <input id='edit-input-date' type='text' value="${book.get('date')}" ${disabled}/>
+        <input id='edit-input-tags' type='text' value="${book.get('tags')}" ${disabled}/>
+        <input id='edit-input-isRead' type='checkbox' ${book.get('isRead') ? 'checked': ''} ${disabled}>
+        <button id='edit-input-button' ${disabled}>Edit</button>
+    `;
+
+    const container = document.getElementById('edit-book-container');
+    container.innerHTML = editInputsHTML;
 };
 
-const setInputValues = (inputNames, book, inputType) => {
-
-}
+const getBookById = (bookId) => {
+    const [ books ] = useState('books');
+    const [ key, value] = books.findEntry((el) => el.id === bookId);
+    return value;
+};
 
 const onAddClick = (inputNames) => {
     const newBook = readInputValues(inputNames, 'add');
@@ -61,14 +93,16 @@ const onAddClick = (inputNames) => {
 const onRemoveClick = (bookId) => context.eventBus.emit('action', {type: 'REMOVE_BOOK', bookId });
 
 const onEditClick = (inputNames, bookId) => {    
-    toggleDisabledInputs([...inputNames, 'button'], 'edit', true);
-    setInputValues(inputNames, book, 'edit');
+    const book = getBookById(bookId);
+    renderEditInputs(book);
 };
 
-const onEditSaveClick = (inputNames, bookId) => {
-    const book = readInputValues(inputNames, 'edit');
-    context.eventBus.emit('action', {type: 'FILTER_BOOKS', book: {...book, id: bookId } );
-    toggleDisabledInputs([...inputNames, 'button'], 'edit', false);
+const onEditSaveClick = (inputNames) => {
+    const book = readInputValues([...inputNames, 'id'], 'edit');
+    context.eventBus.emit('action', {type: 'EDIT_BOOK', book } );
+ 
+    renderEditInputs();
+
 };
 
 const onFilterClick = (inputNames) => {
@@ -85,9 +119,6 @@ const initializeUI = () => {
     const filterButton = document.getElementById('filter-button');
     filterButton.addEventListener('click', onFilterClick.bind(null, inputNames));
 
-    const editButton = document.getElementById('edit-input-button');
-    editButton.addEventListener('click', onEditSaveClick.bind(null, inputNames));
-
     document.addEventListener('click', (event) => {
         if (event.target.classList.contains('remove-book-button')){
             onRemoveClick(event.target.parentNode.dataset.id);
@@ -96,6 +127,11 @@ const initializeUI = () => {
         if (event.target.classList.contains('edit-book-button')){
             onEditClick(event.target.parentNode.dataset.id);
         }
+
+        if (event.target.id === 'edit-input-button'){
+            onEditSaveClick(inputNames);
+        }
+
     });
 
     const filterCheckBox = document.getElementById('filter-input-isRead');
@@ -105,8 +141,10 @@ const initializeUI = () => {
 
 const initializeSubscriptions = () => {
     context.eventBus.on('setState', (newState) => {
-        const books = newState.get('books');
-        renderList(books);
+        const booksFromStorage = newState.get('books');
+        const [ books, setBooks ] = useState('books');
+        setBooks(booksFromStorage);
+        renderList(booksFromStorage);
     })
 };
 
