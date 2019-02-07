@@ -1,6 +1,4 @@
-const context = {
-    eventBus: {}
-}
+import { emitAction, subscribeToStore } from './store.js'
 
 const useState = (() => {
     let state = Immutable.Map();
@@ -87,10 +85,10 @@ const getBookById = (bookId) => {
 
 const onAddClick = (inputNames) => {
     const newBook = readInputValues(inputNames, 'add');
-    context.eventBus.emit('action', {type: 'ADD_BOOK', book: newBook });
+    emitAction({type: 'ADD_BOOK', book: newBook });
 };
 
-const onRemoveClick = (bookId) => context.eventBus.emit('action', {type: 'REMOVE_BOOK', bookId });
+const onRemoveClick = (bookId) => emitAction({type: 'REMOVE_BOOK', bookId });
 
 const onEditClick = (bookId) => {    
     const book = getBookById(bookId);
@@ -99,7 +97,7 @@ const onEditClick = (bookId) => {
 
 const onEditSaveClick = (inputNames) => {
     const book = readInputValues([...inputNames, 'id'], 'edit');
-    context.eventBus.emit('action', {type: 'EDIT_BOOK', book } );
+    emitAction({type: 'EDIT_BOOK', book } );
  
     renderEditInputs();
 
@@ -107,7 +105,7 @@ const onEditSaveClick = (inputNames) => {
 
 const onFilterClick = (inputNames) => {
     const filters = readInputValues(inputNames, 'filter');
-    context.eventBus.emit('action', {type: 'FILTER_BOOKS', filters });
+    emitAction({type: 'FILTER_BOOKS', filters });
 };
 
 const initializeUI = () => {
@@ -136,22 +134,17 @@ const initializeUI = () => {
 
     const filterCheckBox = document.getElementById('filter-input-isRead');
     filterCheckBox.indeterminate = true;
-
 };
 
-const initializeSubscriptions = () => {
-    context.eventBus.on('setState', (newState) => {
+const initialize = () => {
+    initializeUI();
+
+    subscribeToStore((newState) => {
         const booksFromStorage = newState.get('books');
         const [ books, setBooks ] = useState('books');
         setBooks(booksFromStorage);
         renderList(booksFromStorage);
-    })
-};
+    });
+}
 
-const initialize = ({ eventBus }) => {
-    context.eventBus = eventBus;
-    initializeUI();
-    initializeSubscriptions();
-};
-
-export default { initialize };
+export { initialize };

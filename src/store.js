@@ -1,12 +1,20 @@
 const context = {
     state: Immutable.Map(),
-    eventBus: {}
+    listeners: []
 };
+
+const emitState = (state) => {
+    context.listeners.forEach((listener) => listener(state));
+}
+
+const addSubscriber = (callback) => {
+    context.listeners.push(callback);
+}
 
 const setState = (prop, map) => {
     const newState = context.state.set(prop, map);
     context.state = newState;
-    context.eventBus.emit('setState', newState);
+    emitState(newState);
     return newState;
 }
 
@@ -14,27 +22,24 @@ const getState = (prop) => {
     return context.state.get(prop);
 }
 
-const initializeSubscriptions = () => {
-    context.eventBus.on('action', ({type, ...params}) => {
-        switch (type){
-            case 'ADD_BOOK': 
-                add(params.book);
-                break;
-            case 'REMOVE_BOOK': 
-                remove(params.bookId);
-                break;
-            case 'EDIT_BOOK': 
-                edit(params.book);
-                break;
-            case 'FILTER_BOOKS': 
-                filter(params.filters);
-                break;
-        }
-    });
+const callReducer = (type, ...params) => {
+    switch (type){
+        case 'ADD_BOOK': 
+            add(params.book);
+            break;
+        case 'REMOVE_BOOK': 
+            remove(params.bookId);
+            break;
+        case 'EDIT_BOOK': 
+            edit(params.book);
+            break;
+        case 'FILTER_BOOKS': 
+            filter(params.filters);
+            break;
+    }
 }
 
-const initialize = ({ eventBus }) => {
-    context.eventBus = eventBus;
+const initialize = () => {
 
     const list = Immutable.List();
     const books = list.push(Immutable.Map({
@@ -47,8 +52,6 @@ const initialize = ({ eventBus }) => {
         isRead: true
     }));
     setState('books', books);
-
-    initializeSubscriptions();
 
 };
 
@@ -95,4 +98,4 @@ const filter = criteria => {
     setState('books', books);
 };
 
-export default { initialize };
+export { initialize, callReducer as emitAction, addSubscriber as subscribeToStore };

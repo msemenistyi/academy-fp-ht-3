@@ -1,8 +1,5 @@
-import ui from './ui.js';
-import store from './store.js';
+import { initialize as initializeUI } from './ui.js';
+import { initialize as initializeStore } from './store.js';
 
-const eventBus = new EventEmitter();
-
-ui.initialize({eventBus: eventBus});
-store.initialize({eventBus: eventBus});
-
+initializeUI();
+initializeStore();
