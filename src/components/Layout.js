@@ -7,26 +7,6 @@ import { BookList } from './BookList.js';
 
 const Layout = (props) => {
 
-    const onBookAdded = (params) => {
-        emitAction({type: 'ADD_BOOK', params});
-    }
-
-    const onBookEdited = (params) => {
-        emitAction({type: 'EDIT_BOOK', params});
-    }
-
-    const onRemoveBook = (params) => {
-        emitAction({type: 'REMOVE_BOOK', params});
-    }
-
-    const onEditBook = (params) => {
-        emitAction({type: 'BOOK_TO_EDIT', params});
-    }
-
-    const onFilter = (params) => {
-        emitAction({type: 'FILTER_BOOK', params});
-    }
-
     // const getBookById = (bookId) => {
     //     const [ books ] = useState('books');
     //     const [ key, value] = books.findEntry((el) => el.get('id') === bookId);
@@ -35,10 +15,10 @@ const Layout = (props) => {
 
 
     return createElement('div', null, [
-        createElement(Filter, { onFilter }),
-        createElement(BookList, { ...props, onEditBook, onRemoveBook }),
-        createElement(AddBook, { onBookAdded }),
-        createElement(EditBook, { onBookEdited })
+        createElement(Filter, { onFilter: props.onFilter }),
+        createElement(BookList, {books: props.books, onEditBook: props.onEditBook, onRemoveBook: props.onRemoveBook}),
+        createElement(AddBook, { onBookAdded: props.onBookAdded }),
+        createElement(EditBook, { onBookEdited: props.onBookEdited })
     ]);
 
 };

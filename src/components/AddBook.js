@@ -22,7 +22,7 @@ const AddBook = (props) => {
             </div> `,
         events: [{
             eventType: 'click',
-            targetClassName: 'add-book-button',
+            target: {id: 'add-book-button'},
             callback: onAddClick
         }]
     };
